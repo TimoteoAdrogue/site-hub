@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Work Index — Timoteo Adrogué</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0d0c; --fg: #ece8e1; --muted: #8a857d; --line: #2a2724;
+    --live: #7fbf7a; --staging: #e0b25c; --local: #6f6a63;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg: #f4f1ec; --fg: #1b1917; --muted: #6f6a63; --line: #d9d3ca;
+            --live: #3f8a3a; --staging: #b07d1c; --local: #9a948b; }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--bg); color: var(--fg); font: 400 15px/1.55 Inter, system-ui, sans-serif;
+         -webkit-font-smoothing: antialiased; }
+  main { max-width: 1280px; margin: 0 auto; padding: clamp(48px, 9vw, 120px) clamp(16px, 4vw, 48px) 96px; }
+  a { color: inherit; }
+
+  header h1 { font: 400 clamp(56px, 10vw, 128px)/.9 "Instrument Serif", serif; letter-spacing: -.02em; }
+  header h1 em { color: var(--muted); }
+  header p { margin-top: 24px; max-width: 46ch; color: var(--muted); font-size: 17px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 28px; font-size: 13px; color: var(--muted); }
+
+  .status { display: inline-flex; align-items: center; gap: 8px; }
+  .status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+  .live { --c: var(--live); } .staging { --c: var(--staging); } .local { --c: var(--local); }
+
+  section { margin-top: clamp(72px, 10vw, 128px); }
+  section > h2 { display: flex; justify-content: space-between; align-items: baseline;
+                 padding-bottom: 14px; border-bottom: 1px solid var(--line);
+                 font: 500 12px/1 Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 72px clamp(24px, 4vw, 56px); margin-top: 40px; }
+  .wide { grid-column: 1 / -1; }
+  .shots { display: grid; grid-template-columns: repeat(var(--n, 1), 1fr); gap: 16px; }
+
+  .shot { display: block; position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 6px;
+          -webkit-mask-image: linear-gradient(#000 62%, transparent); mask-image: linear-gradient(#000 62%, transparent); }
+  .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block;
+              transition: transform .9s cubic-bezier(.2, .7, .2, 1), opacity .4s; }
+  a.shot:hover img { transform: scale(1.035); }
+  span.shot img { opacity: .75; }
+  .shot b { position: absolute; left: 14px; top: 12px; font: 500 11px/1 Inter, sans-serif; letter-spacing: .12em;
+            text-transform: uppercase; color: #fff; background: rgba(0,0,0,.6); padding: 6px 8px; border-radius: 3px; }
+
+  .meta { margin-top: -28px; position: relative; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  h3 { font: 400 clamp(30px, 3.4vw, 42px)/1.05 "Instrument Serif", serif; }
+  .row .status, time { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .meta p { margin-top: 8px; color: var(--muted); max-width: 60ch; }
+  .links { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 14px; font-size: 14px; }
+  .links a { text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: border-color .2s; }
+  .links a:hover { border-color: var(--fg); }
+  .links code { font: 12px ui-monospace, monospace; color: var(--muted); }
+
+  footer { margin-top: 120px; color: var(--muted); font-size: 13px; }
+
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; gap: 56px; }
+    .shots { grid-template-columns: 1fr; }
+    .row { flex-wrap: wrap; }
+  }
+  @media (prefers-reduced-motion: reduce) { .shot img { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Work <em>index</em></h1>
+    <p id="intro"></p>
+    <div class="legend">
+      <span class="status live">Live</span>
+      <span class="status staging">Staging or demo, not the official site</span>
+      <span class="status local">Local only</span>
+    </div>
+  </header>
+  <div id="groups"></div>
+  <footer>Updated 10 October 2026</footer>
+</main>
+
+<script>
+const GH = 'https://github.com/TimoteoAdrogue/';
+const PAGES = 'https://timoteoadrogue.github.io/';
+const STATUS = { live: 'Live', staging: 'Staging', local: 'Local only' };
+
+// Add a project: one object here + a 1200px-wide screenshot in shots/.
+const groups = [
+  { title: 'Client work', items: [
+    { name: 'Cobalt Création', status: 'staging', date: '2026-10-08', wide: true,
+      desc: 'Redesign of a Wix site for a Paris luxury personalisation atelier. Three directions, palette #02374F / #D0AB7E.',
+      shots: [
+        { label: 'V1', img: 'cobalt-v1', url: PAGES + 'cobalt-creation-site/' },
+        { label: 'V2 « Maison »', img: 'cobalt-v2', url: PAGES + 'cobalt-creation-site-v2/' },
+        { label: 'V3 « Atelier »', img: 'cobalt-v3', url: PAGES + 'cobalt-creation-site-v3/' },
+      ],
+      links: [['V1 repo', GH + 'cobalt-creation-site'], ['V2 repo', GH + 'cobalt-creation-site-v2'], ['V3 repo', GH + 'cobalt-creation-site-v3']] },
+    { name: 'Elysium', status: 'staging', date: '2026-10-05',
+      desc: 'Rebuild of elysium.cc, Geneva design & technology studio since 2005. Staging mirror; production stays on elysium.cc.',
+      shots: [{ img: 'elysium', url: PAGES + 'elysium-website/' }],
+      links: [['Staging', PAGES + 'elysium-website/'], ['Production', 'https://elysium.cc'], ['Repo', GH + 'elysium-website']] },
+    { name: 'Letsmed', status: 'staging', date: '2026-10-03',
+      desc: 'Homepage redesign pitch for letsmed.de, a worldwide medical-supplies partner.',
+      shots: [{ img: 'letsmed', url: PAGES + 'letsmed-redesign/' }],
+      links: [['Preview', PAGES + 'letsmed-redesign/'], ['Current site', 'https://letsmed.de'], ['Repo', GH + 'letsmed-redesign']] },
+  ]},
+  { title: 'Concepts & demos', items: [
+    { name: 'AF-Barber', status: 'staging', date: '2026-08-19',
+      desc: 'Barber shop in Chêne-Bourg: services, prices, booking by phone.',
+      shots: [{ img: 'afbarber', url: PAGES + 'af-barber-website/' }],
+      links: [['Site', PAGES + 'af-barber-website/'], ['Repo', GH + 'af-barber-website']] },
+    { name: 'Domaine de Beauvent', status: 'staging', date: '2026-08-18',
+      desc: 'Cinematic scroll site for a family winery in Bernex, Geneva. Demonstration.',
+      shots: [{ img: 'beauvent', url: PAGES + 'domaine-de-beauvent/' }],
+      links: [['Site', PAGES + 'domaine-de-beauvent/'], ['Repo', GH + 'domaine-de-beauvent']] },
+    { name: 'La Maison du Carac', status: 'staging', date: '2026-08-18',
+      desc: 'Storefront for Confiserie Gremion in Geneva. Unofficial, visuals are AI and still to be replaced.',
+      shots: [{ img: 'carac', url: PAGES + 'maison-du-carac/' }],
+      links: [['Site', PAGES + 'maison-du-carac/'], ['Repo', GH + 'maison-du-carac']] },
+    { name: 'HONE', status: 'local', date: '2026-08-25',
+      desc: 'Concept brand built to show what the cinematic scroll format can do. Not published yet.',
+      shots: [{ img: 'hone' }],
+      links: [['', '~/Documents/PROJECTS/hone/site']] },
+  ]},
+  { title: 'Own projects', items: [
+    { name: 'Daily Desk', status: 'live', date: '2026-10-01',
+      desc: 'My Shopify store: five desk accessories, custom Horizon theme with a scrubbed canvas hero.',
+      shots: [{ img: 'dailydesk', url: 'https://dailydesk.ch' }],
+      links: [['dailydesk.ch', 'https://dailydesk.ch']] },
+    { name: 'Chute Libre Prépa', status: 'live', date: '2026-09-28',
+      desc: 'Study app for the SPHAIR parachutist exam: theory quizzes, physical-test scoring, progress tracking.',
+      shots: [{ img: 'chute', url: 'https://chute-libre-prepa.netlify.app' }],
+      links: [['Netlify', 'https://chute-libre-prepa.netlify.app']] },
+  ]},
+];
+
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = d => new Date(d + 'T12:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+const shot = (s, name) => {
+  const img = `<img src="shots/${s.img}.jpg" alt="${esc(name)}${s.label ? ' ' + esc(s.label) : ''} homepage" loading="lazy">`
+            + (s.label ? `<b>${esc(s.label)}</b>` : '');
+  return s.url ? `<a class="shot" href="${s.url}" target="_blank" rel="noopener">${img}</a>` : `<span class="shot">${img}</span>`;
+};
+const link = ([t, u]) => u.startsWith('http')
+  ? `<a href="${u}" target="_blank" rel="noopener">${esc(t)} ↗</a>`
+  : `<code>${esc(u)}</code>`;
+
+document.getElementById('groups').innerHTML = groups.map(g => `
+  <section>
+    <h2><span>${g.title}</span><span>${g.items.length}</span></h2>
+    <div class="grid">${g.items.map(p => `
+      <article class="${p.wide ? 'wide' : ''}">
+        <div class="shots" style="--n:${p.shots.length}">${p.shots.map(s => shot(s, p.name)).join('')}</div>
+        <div class="meta">
+          <div class="row"><h3>${esc(p.name)}</h3><span class="status ${p.status}">${STATUS[p.status]}</span></div>
+          <p>${esc(p.desc)}</p>
+          <div class="links">${p.links.map(link).join('')}<time datetime="${p.date}">Updated ${fmt(p.date)}</time></div>
+        </div>
+      </article>`).join('')}
+    </div>
+  </section>`).join('');
+
+const all = groups.flatMap(g => g.items);
+const count = st => all.filter(p => p.status === st).length;
+document.getElementById('intro').textContent =
+  `Every site I'm building or have built. ${all.length} projects: ${count('live')} live, ${count('staging')} in staging, ${count('local')} local only.`;
+</script>
+</body>
+</html>
