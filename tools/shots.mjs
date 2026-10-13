@@ -6,6 +6,7 @@ const sites = {
   'cobalt-v1': 'https://timoteoadrogue.github.io/cobalt-creation-site/',
   'elysium': 'https://timoteoadrogue.github.io/elysium-website/',
   'letsmed': 'https://timoteoadrogue.github.io/letsmed-redesign/',
+  'hecpro': 'https://timoteoadrogue.github.io/hecpro-redesign/',
   'beauvent': 'https://timoteoadrogue.github.io/domaine-de-beauvent/',
   'carac': 'https://timoteoadrogue.github.io/maison-du-carac/',
   'afbarber': 'https://timoteoadrogue.github.io/af-barber-website/',
