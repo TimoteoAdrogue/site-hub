@@ -8,6 +8,7 @@ const sites = {
   'letsmed': 'https://timoteoadrogue.github.io/letsmed-redesign/',
   'hecpro': 'https://timoteoadrogue.github.io/hecpro-redesign/',
   'poulet': 'https://timoteoadrogue.github.io/poulet-secret/',
+  'poulet-v2': 'https://timoteoadrogue.github.io/poulet-secret-v2/',
   'beauvent': 'https://timoteoadrogue.github.io/domaine-de-beauvent/',
   'carac': 'https://timoteoadrogue.github.io/maison-du-carac/',
   'afbarber': 'https://timoteoadrogue.github.io/af-barber-website/',
